@@ -506,6 +506,21 @@ var insertParser = seq(
 	};
 });
 
+
+// INSERT SET parser
+var insertSetParser = seq(
+	regex(/INSERT INTO/i).skip(optWhitespace).then(tableListExpression),
+	optWhitespace,
+	regex(/SET\s?/i).skip(optWhitespace).then(assignList)
+).map(function(node) {
+	return {
+		type: 'insert',
+		into: node[0],
+		values: node[2],
+	};
+});
+
+
 var updateParser = seq(
 	regex(/UPDATE/i).skip(optWhitespace).then(tableListExpression),
 	optWhitespace,
