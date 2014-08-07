@@ -304,7 +304,7 @@ var tableListExpression = seq(
 // JOIN expression (including JOIN statements)
 var joinExpression = seq(
 	opt(seq(
-		regex(/INNER|LEFT|RIGHT/i),
+		regex(/INNER|LEFT( OUTER)?|RIGHT( OUTER)?/i),
 		whitespace
 	).map(function(node) {
 		return node[0].toLowerCase();
@@ -318,7 +318,7 @@ var joinExpression = seq(
 	getPos(expression)
 ).map(function(node) {
 	var n = {};
-	n.type = node[0] || 'inner';
+	n.type = node[0].replace(' outer','') || 'inner';
 	n.table = node[3].table;
 	n.alias = node[3].alias;
 	n.position = node[3].position;
